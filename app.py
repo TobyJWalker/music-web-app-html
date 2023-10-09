@@ -22,7 +22,9 @@ def get_one_album(id):
     conn = get_flask_database_connection(app)
     repo = AlbumRepository(conn)
 
-    return str(repo.find(id))
+    album = repo.find(id)
+
+    return render_template('albums.html', albums=[album])
 
 @app.route('/albums', methods=['POST'])
 def create_new_album():
