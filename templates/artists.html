@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Artists</title>
+    </head>
+    <body>
+        <h1>Artists</h1>
+
+        {% for artist in artists %}
+            <div>
+
+                {% if albums %}
+                    <h2>{{ artist.name }}</h2>
+                    <p> Genre: {{ artist.genre }}</p>
+
+                    <h3>Albums</h3>
+                    {% for album in albums %}
+                        <a href="/albums/{{ album.id }}">{{ album.title }}</a>
+                        <br>
+                    {% endfor %}
+
+                {% else %}
+                    <a href="/artists/{{ artist.id }}">Artist: {{artist.name}}</h4>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </body>
+</html>

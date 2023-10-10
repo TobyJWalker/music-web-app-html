@@ -20,11 +20,13 @@ def get_all_albums():
 @app.route('/albums/<id>', methods=['GET'])
 def get_one_album(id):
     conn = get_flask_database_connection(app)
-    repo = AlbumRepository(conn)
+    album_repo = AlbumRepository(conn)
+    artist_repo = ArtistRepository(conn)
 
-    album = repo.find(id)
+    album = album_repo.find(id)
+    artist = artist_repo.find(album.artist_id)
 
-    return render_template('albums.html', albums=[album])
+    return render_template('albums.html', albums=[album], artist=artist)
 
 @app.route('/albums', methods=['POST'])
 def create_new_album():
@@ -45,7 +47,16 @@ def get_all_artist_names():
 
     artists = repo.all()
 
-    return ', '.join([artist.name for artist in artists])
+    return render_template('artists.html', artists=artists)
+
+@app.route('/artists/<id>', methods=['GET'])
+def get_one_artist(id):
+    conn = get_flask_database_connection(app)
+    repo = ArtistRepository(conn)
+
+    artist = repo.find_with_albums(id)
+
+    return render_template('artists.html', artists=[artist], albums=artist.albums)
 
 @app.route('/artists', methods=['POST'])
 def create_artist():

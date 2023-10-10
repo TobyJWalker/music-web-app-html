@@ -9,8 +9,16 @@
         
         {% for album in albums %}
             <div>
-                <h4>Title: {{ album.title }}</h2>
-                <p>Year: {{ album.release_year }}</p>
+
+                {% if artist %}
+                    <h2>{{ album.title }}</h2>
+                    <p>Year: {{ album.release_year }}</p>
+                    <p>Artist: {{ artist.name }}</p>
+                    <a href="/albums">Go back</a>
+                {% else %}
+                    <a href="/albums/{{ album.id }}">Album: {{ album.title }}</a>
+                {% endif %}
+
             </div>
         {% endfor %}
 
