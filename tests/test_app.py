@@ -9,9 +9,9 @@ def test_list_all_albums(page, test_web_address, db_connection):
     
     page.goto(f'http://{test_web_address}/albums')
 
-    divs = page.locator('div')
+    album_list = page.locator('.l-albums')
 
-    expect(divs).to_have_count(12)
+    expect(album_list).to_have_count(12)
 
 def test_list_one_album(page, test_web_address, db_connection):
     db_connection.seed('seeds/music_library.sql')
@@ -59,3 +59,16 @@ def test_click_artist(page, test_web_address, db_connection):
     h2 = page.locator('h2')
 
     expect(h2).to_have_text('Pixies')
+
+def test_create_new_album(page, test_web_address, db_connection):
+    db_connection.seed('seeds/music_library.sql')
+
+    page.goto(f'http://{test_web_address}/albums')
+    page.click('text=Add new album')
+    page.fill('input[name="title"]', 'New Album')
+    page.fill('input[name="release_year"]', '2021')
+    page.fill('input[name="artist"]', 'Pixies')
+    page.click('input[type="submit"]')
+
+    h2 = page.locator('h2')
+    expect(h2).to_have_text('New Album')

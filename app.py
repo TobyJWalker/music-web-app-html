@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect
 from lib.database_connection import get_flask_database_connection
 from lib.album_repository import *
 from lib.artist_repository import *
@@ -28,17 +28,36 @@ def get_one_album(id):
 
     return render_template('albums.html', albums=[album], artist=artist)
 
+@app.route('/albums/new', methods=['GET'])
+def new_album_form():
+    return render_template('new_album.html')
+
 @app.route('/albums', methods=['POST'])
 def create_new_album():
     conn = get_flask_database_connection(app)
-    repo = AlbumRepository(conn)
+    album_repo = AlbumRepository(conn)
+    artist_repo = ArtistRepository(conn)
 
     title = request.form['title']
-    release_year = int(request.form['release_year'])
-    artist_id = int(request.form['artist_id'])
+    try:
+        release_year = int(request.form['release_year'])
+    except ValueError:
+        release_year = None
+    artist_name = request.form['artist']
+    artist = artist_repo.find_by_name(artist_name)
 
-    repo.create(title, release_year, artist_id)
-    return ''
+    if type(artist) == Artist:
+        artist_id = artist.id
+    else:
+        artist_id = None
+    
+    album = Album(None, title, release_year, artist_id)
+
+    if album.is_valid():
+        new_id = album_repo.create(title, release_year, artist_id).id
+        return redirect(f'/albums/{new_id}')
+    else:
+        return render_template('new_album.html', album=album, errors=album.generate_errors()), 400
 
 @app.route('/artists', methods=['GET'])
 def get_all_artist_names():

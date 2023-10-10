@@ -20,7 +20,7 @@ def test_album_not_valid():
     album1 = Album(None, "Test Album", 1, 1)
     album2 = Album(None, 53, 1, 1)
     album3 = Album(None, "Test Album", None, 1)
-    album4 = Album(None, "Test Album", 1, None)
+    album4 = Album(None, "Test Album", 1, '1')
 
     assert album1.is_valid()
     assert not album2.is_valid()
