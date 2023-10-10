@@ -5,14 +5,14 @@
         <title>Artists</title>
     </head>
     <body>
-        <h1>Artists</h1>
+        <h1 class="t-title">Artists</h1>
 
         {% for artist in artists %}
             <div>
 
                 {% if albums %}
-                    <h2>{{ artist.name }}</h2>
-                    <p> Genre: {{ artist.genre }}</p>
+                    <h2 class="t-artist_name">{{ artist.name }}</h2>
+                    <p class="t-artist_info"> Genre: {{ artist.genre }}</p>
 
                     <h3>Albums</h3>
                     {% for album in albums %}

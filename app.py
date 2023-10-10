@@ -17,7 +17,7 @@ def get_all_albums():
 
     return render_template('albums.html', albums=albums)
 
-@app.route('/albums/<id>', methods=['GET'])
+@app.route('/albums/<int:id>', methods=['GET'])
 def get_one_album(id):
     conn = get_flask_database_connection(app)
     album_repo = AlbumRepository(conn)
@@ -49,7 +49,7 @@ def get_all_artist_names():
 
     return render_template('artists.html', artists=artists)
 
-@app.route('/artists/<id>', methods=['GET'])
+@app.route('/artists/<int:id>', methods=['GET'])
 def get_one_artist(id):
     conn = get_flask_database_connection(app)
     repo = ArtistRepository(conn)

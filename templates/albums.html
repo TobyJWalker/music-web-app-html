@@ -5,15 +5,15 @@
         <title>Albums</title>
     </head>
     <body>
-        <h1>Albums</h1>
+        <h1 class="t-title">Albums</h1>
         
         {% for album in albums %}
             <div>
 
                 {% if artist %}
                     <h2>{{ album.title }}</h2>
-                    <p>Year: {{ album.release_year }}</p>
-                    <p>Artist: {{ artist.name }}</p>
+                    <p class="t-album_info">Year: {{ album.release_year }}</p>
+                    <p class="t-album_info">Artist: {{ artist.name }}</p>
                     <a href="/albums">Go back</a>
                 {% else %}
                     <a href="/albums/{{ album.id }}">Album: {{ album.title }}</a>
