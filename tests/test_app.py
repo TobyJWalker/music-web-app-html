@@ -9,7 +9,7 @@ def test_list_all_albums(page, test_web_address, db_connection):
     
     page.goto(f'http://{test_web_address}/albums')
 
-    album_list = page.locator('.l-albums')
+    album_list = page.locator('.l-album-element')
 
     expect(album_list).to_have_count(12)
 
@@ -27,7 +27,7 @@ def test_click_album(page, test_web_address, db_connection):
     db_connection.seed('seeds/music_library.sql')
 
     page.goto(f'http://{test_web_address}/albums')
-    page.click(f'text=Album: Doolittle')
+    page.click(f'text=Doolittle')
 
     h2 = page.locator('h2')
     expect(h2).to_have_text('Doolittle')
@@ -36,9 +36,9 @@ def test_list_all_artists(page, test_web_address, db_connection):
     db_connection.seed('seeds/music_library.sql')
 
     page.goto(f'http://{test_web_address}/artists')
-    divs = page.locator('div')
+    artists = page.locator('.l-artist-element')
 
-    expect(divs).to_have_count(4)
+    expect(artists).to_have_count(4)
 
 def test_list_one_artist(page, test_web_address, db_connection):
     db_connection.seed('seeds/music_library.sql')
@@ -72,3 +72,15 @@ def test_create_new_album(page, test_web_address, db_connection):
 
     h2 = page.locator('h2')
     expect(h2).to_have_text('New Album')
+
+def test_create_new_artist(page, test_web_address, db_connection):
+    db_connection.seed('seeds/music_library.sql')
+
+    page.goto(f'http://{test_web_address}/artists')
+    page.click('text=Add new artist')
+    page.fill('input[name="name"]', 'New Artist')
+    page.fill('input[name="genre"]', 'New Genre')
+    page.click('input[type="submit"]')
+
+    h2 = page.locator('h2')
+    expect(h2).to_have_text('New Artist')

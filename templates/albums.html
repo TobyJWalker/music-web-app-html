@@ -7,8 +7,9 @@
     <body>
         <h1 class="t-title">Albums</h1>
         
+        <ul class="l-albums">
         {% for album in albums %}
-            <div class="l-albums">
+            <ul class="l-album-element">
 
                 {% if artist %}
                     <h2>{{ album.title }}</h2>
@@ -16,11 +17,12 @@
                     <p class="t-album_info">Artist: {{ artist.name }}</p>
                     <a href="/albums">Go back</a>
                 {% else %}
-                    <a href="/albums/{{ album.id }}">Album: {{ album.title }}</a>
+                    <a href="/albums/{{ album.id }}">{{ album.title }}</a>
                 {% endif %}
 
-            </div>
+            </ul>
         {% endfor %}
+        </ul>
         {% if not artist %}
             <div>
                 <a href="/albums/new">Add new album</a>

@@ -7,15 +7,16 @@
     <body>
         <h1 class="t-title">Artists</h1>
 
+        <ul class="l-artists">
         {% for artist in artists %}
-            <div>
+            <div class="l-artist-element">
 
-                {% if albums %}
+                {% if more_info %}
                     <h2 class="t-artist_name">{{ artist.name }}</h2>
                     <p class="t-artist_info"> Genre: {{ artist.genre }}</p>
 
                     <h3>Albums</h3>
-                    {% for album in albums %}
+                    {% for album in artist.albums %}
                         <a href="/albums/{{ album.id }}">{{ album.title }}</a>
                         <br>
                     {% endfor %}
@@ -25,5 +26,12 @@
                 {% endif %}
             </div>
         {% endfor %}
+        </ul>
+
+        {% if not more_info %}
+            <div>
+                <a href="/artists/new">Add new artist</a>
+            </div>
+        {% endif %}
     </body>
 </html>

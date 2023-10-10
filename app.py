@@ -42,7 +42,7 @@ def create_new_album():
     try:
         release_year = int(request.form['release_year'])
     except ValueError:
-        release_year = None
+        release_year = f'1'
     artist_name = request.form['artist']
     artist = artist_repo.find_by_name(artist_name)
 
@@ -66,16 +66,24 @@ def get_all_artist_names():
 
     artists = repo.all()
 
-    return render_template('artists.html', artists=artists)
+    return render_template('artists.html', artists=artists, more_info=False)
 
 @app.route('/artists/<int:id>', methods=['GET'])
 def get_one_artist(id):
     conn = get_flask_database_connection(app)
     repo = ArtistRepository(conn)
 
-    artist = repo.find_with_albums(id)
+    artist = repo.find(id)
+    try:
+        artist.albums = repo.find_with_albums(id).albums
+    except IndexError:
+        artist.albums = []
 
-    return render_template('artists.html', artists=[artist], albums=artist.albums)
+    return render_template('artists.html', artists=[artist], more_info=True)
+
+@app.route('/artists/new', methods=['GET'])
+def new_artist_form():
+    return render_template('new_artist.html')
 
 @app.route('/artists', methods=['POST'])
 def create_artist():
@@ -85,8 +93,13 @@ def create_artist():
     name = request.form['name']
     genre = request.form['genre']
 
-    repo.create(name, genre)
-    return ''
+    artist = Artist(None, name, genre)
+
+    if artist.is_valid():
+        new_id = repo.create(name, genre).id
+        return redirect(f'/artists/{new_id}')
+    else:
+        return render_template('new_artist.html', artist=artist, errors=artist.generate_errors()), 400
 
 
 # These lines start the server if you run this file directly
